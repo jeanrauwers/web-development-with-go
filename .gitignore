@@ -15,3 +15,5 @@
 # vendor/
 
 temp
+main
+runner-build
