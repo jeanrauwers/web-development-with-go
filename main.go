@@ -26,5 +26,5 @@ func main() {
 	r.HandleFunc("/contact", contact)
 	r.NotFoundHandler = r.NewRoute().HandlerFunc(notFoundHandler).GetHandler()
 
-	http.ListenAndServe("localhost:3000", r)
+	http.ListenAndServe("localhost:3333", r)
 }
