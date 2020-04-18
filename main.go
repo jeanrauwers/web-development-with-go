@@ -1,15 +1,17 @@
 package main
 
 import (
-	"fmt"
 	"html/template"
 	"net/http"
 
 	"github.com/gorilla/mux"
 )
 
-var homeTemplate *template.Template
-var contactTemplate *template.Template
+var (
+	homeTemplate     *template.Template
+	contactTemplate  *template.Template
+	notFoundtemplate *template.Template
+)
 
 func contact(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html")
@@ -26,7 +28,10 @@ func home(w http.ResponseWriter, r *http.Request) {
 }
 
 func notFoundHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprint(w, "<h1>404!!!! Page not Found</h1>")
+	w.Header().Set("Content-Type", "text/html")
+	if err := notFoundtemplate.Execute(w, nil); err != nil {
+		panic(err)
+	}
 }
 
 func main() {
@@ -37,6 +42,11 @@ func main() {
 	}
 
 	contactTemplate, err = template.ParseFiles("views/contact.gohtml")
+	if err != nil {
+		panic(err)
+	}
+
+	notFoundtemplate, err = template.ParseFiles("views/notFound.gohtml")
 	if err != nil {
 		panic(err)
 	}
