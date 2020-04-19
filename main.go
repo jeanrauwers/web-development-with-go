@@ -16,17 +16,17 @@ var (
 
 func contact(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html")
-	contactView.Render(w, nil)
+	errorHandler(contactView.Render(w, nil))
 }
 
 func home(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html")
-	homeView.Render(w, nil)
+	errorHandler(homeView.Render(w, nil))
 }
 
 func notFoundHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html")
-	notFoundView.Render(w, nil)
+	errorHandler(notFoundView.Render(w, nil))
 }
 
 func main() {
@@ -41,4 +41,10 @@ func main() {
 	r.NotFoundHandler = r.NewRoute().HandlerFunc(notFoundHandler).GetHandler()
 
 	http.ListenAndServe("localhost:3333", r)
+}
+
+func errorHandler(err error) {
+	if err != nil {
+		panic(err)
+	}
 }
