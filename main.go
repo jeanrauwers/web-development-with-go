@@ -1,55 +1,45 @@
 package main
 
 import (
-	"html/template"
 	"net/http"
+
+	"gocourse.com/views"
 
 	"github.com/gorilla/mux"
 )
 
 var (
-	homeTemplate     *template.Template
-	contactTemplate  *template.Template
-	notFoundtemplate *template.Template
+	homeView     *views.View
+	contactView  *views.View
+	notFoundView *views.View
 )
 
 func contact(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html")
-	if err := contactTemplate.Execute(w, nil); err != nil {
+	if err := contactView.Template.Execute(w, nil); err != nil {
 		panic(err)
 	}
 }
 
 func home(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html")
-	if err := homeTemplate.Execute(w, nil); err != nil {
+	if err := homeView.Template.Execute(w, nil); err != nil {
 		panic(err)
 	}
 }
 
 func notFoundHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html")
-	if err := notFoundtemplate.Execute(w, nil); err != nil {
+	if err := notFoundView.Template.Execute(w, nil); err != nil {
 		panic(err)
 	}
 }
 
 func main() {
-	var err error
-	homeTemplate, err = template.ParseFiles("views/home.gohtml", "views/layouts/footer.gohtml")
-	if err != nil {
-		panic(err)
-	}
 
-	contactTemplate, err = template.ParseFiles("views/contact.gohtml", "views/layouts/footer.gohtml")
-	if err != nil {
-		panic(err)
-	}
-
-	notFoundtemplate, err = template.ParseFiles("views/notFound.gohtml")
-	if err != nil {
-		panic(err)
-	}
+	homeView = views.NewView("views/home.gohtml")
+	contactView = views.NewView("views/contact.gohtml")
+	notFoundView = views.NewView("views/notFound.gohtml")
 
 	r := mux.NewRouter()
 	r.HandleFunc("/", home)
