@@ -5,6 +5,11 @@ import (
 	"path/filepath"
 )
 
+var (
+	LayoutDir   string = "views/layouts/"
+	TemplateExt string = ".gohtml"
+)
+
 func NewView(layout string, files ...string) *View {
 	files = append(files, listLayoutFiles()...)
 
@@ -25,7 +30,7 @@ type View struct {
 }
 
 func listLayoutFiles() []string {
-	files, err := filepath.Glob("views/layouts/*.gohtml")
+	files, err := filepath.Glob(LayoutDir + "*" + TemplateExt)
 	if err != nil {
 		panic(err)
 	}
